@@ -1,0 +1,57 @@
+{
+  "format": "shapeforge-project",
+  "version": 1,
+  "name": "shapeforge",
+  "shapes": [
+    {
+      "kind": "roofCross",
+      "params": {
+        "pieceSize": 2,
+        "units": 0,
+        "nxAngle": 45,
+        "nxLen": 2,
+        "nxRows": 1,
+        "nxEnd": 0,
+        "pxAngle": 45,
+        "pxLen": 2,
+        "pxRows": 1,
+        "pxEnd": 0,
+        "nzAngle": 45,
+        "nzLen": 2,
+        "nzRows": 3,
+        "nzEnd": 0,
+        "pzAngle": 45,
+        "pzLen": 2,
+        "pzRows": 2,
+        "pzShift": -2,
+        "pzEnd": 0,
+        "edging": 1,
+        "edgeMaterial": 3502973158,
+        "edgeRidge": 1,
+        "edgeEaves": 1,
+        "edgeSides": 0,
+        "double": 0,
+        "innerMaterial": 1358536105,
+        "innerDrop": 1,
+        "recede": 0,
+        "recedeEnds": 0,
+        "recedeEnds2": 0
+      },
+      "position": [
+        0,
+        1.5,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "fill": "hollow",
+      "wallThickness": 1,
+      "lineWeight": "thick",
+      "materialItem": 196827131,
+      "op": "add"
+    }
+  ]
+}

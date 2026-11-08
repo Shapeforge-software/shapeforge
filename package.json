@@ -1,0 +1,34 @@
+{
+  "name": "shapeforge",
+  "version": "0.53.2",
+  "description": "Builds Enshrouded blueprints (.ebblueprint for Embervale Toolkit) from combined 3D shapes.",
+  "author": {
+    "name": "JamGobbar",
+    "email": "shapeforge.software@gmail.com"
+  },
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/Shapeforge-software/shapeforge",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shapeforge-software/shapeforge.git"
+  },
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "node build.mjs && electron .",
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "three": "^0.178.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/three": "^0.178.0",
+    "electron": "^45.2.1",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "format": "ebt-blueprint",
+  "version": 1,
+  "name": "rooftest",
+  "build": "1283531",
+  "created": "2026-11-03T07:41:24Z",
+  "toolkit": "3.4.1",
+  "id": "8ca61bb055b837328f743ee4a929e105",
+  "source": "recorded",
+  "contentSha256": "5e4c6ab6eaa4375a31f02068ec29156e13b6f7985185c650c4b7aa9f569e54ef",
+  "anchor": [0,0,0],
+  "pieces": [
+    {"kind":"block","blueprintId":3000989055,"materialItem":196827131,"pos":[0,0,0],"rot":[0,0,0,1],"flag":1},
+    {"kind":"block","blueprintId":1083013738,"materialItem":196827131,"pos":[0,0,4.5],"rot":[0,0,0,1],"flag":1},
+    {"kind":"block","blueprintId":2297453360,"materialItem":196827131,"pos":[0,0,12.5],"rot":[0,0.707106769,0,0.707106769],"flag":1},
+    {"kind":"block","blueprintId":3000989055,"materialItem":196827131,"pos":[-4.5,0,4.5],"rot":[0,0.707106769,0,0.707106769],"flag":1},
+    {"kind":"block","blueprintId":1083013738,"materialItem":196827131,"pos":[0,0,8.5],"rot":[0,1,0,0],"flag":1},
+    {"kind":"block","blueprintId":2297453360,"materialItem":196827131,"pos":[0,0,12.5],"rot":[0,1,0,0],"flag":1}
+  ]
+}

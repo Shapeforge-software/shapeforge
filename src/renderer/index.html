@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'" />
+    <title>ShapeForge</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav id="file-tabs" role="tablist" aria-label="Open files" hidden></nav>
+    <header id="ribbon" aria-label="Toolbar">
+      <div class="brand">
+        <button id="brand-logo" type="button" class="brand-logo" title="About ShapeForge" aria-label="About ShapeForge"><!--LOGO--></button>
+        <h1>ShapeForge</h1>
+        <p class="project-file" title="The project file"><span id="project-file">Untitled</span><span id="dirty" class="dirty" hidden> (unsaved)</span></p>
+      </div>
+
+      <div class="rgroup" role="group" aria-labelledby="g-file">
+        <div class="rbody">
+          <button id="new" type="button" class="rbtn" title="New project (Ctrl+N)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M12 11v6M9 14h6"/></svg><span>New</span></button>
+          <button id="open" type="button" class="rbtn" title="Open a project (Ctrl+O)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7V5h6l2 2"/></svg><span>Open…</span></button>
+          <button id="save" type="button" class="rbtn" title="Save (Ctrl+S)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h12l2 2v16H5z"/><path d="M8 3v6h8V3"/><path d="M8 21v-7h8v7"/></svg><span>Save</span></button>
+          <button id="save-as" type="button" class="rbtn" title="Save as a new file (Ctrl+Shift+S)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l2 2v6"/><path d="M5 3v18h7"/><path d="M8 3v5h6V3"/><path d="M14 20l6-6 2 2-6 6h-2z"/></svg><span>Save as…</span></button>
+        </div>
+        <div class="rlabel" id="g-file">Project</div>
+      </div>
+
+      <div class="rgroup" role="group" aria-labelledby="g-edit">
+        <div class="rbody">
+          <button id="undo" type="button" class="rbtn" title="Undo (Ctrl+Z)" disabled><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-4"/></svg><span>Undo</span></button>
+          <button id="redo" type="button" class="rbtn" title="Redo (Ctrl+Y or Ctrl+Shift+Z)" disabled><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14l5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h4"/></svg><span>Redo</span></button>
+        </div>
+        <div class="rlabel" id="g-edit">Edit</div>
+      </div>
+
+      <div class="rgroup" role="group" aria-labelledby="g-tools">
+        <div class="rbody">
+          <button type="button" class="rbtn tool" data-tool-button="navigate" aria-pressed="true" title="Navigate (H): drag to turn the view"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c-3 3-3 13 0 16M12 4c3 3 3 13 0 16"/></svg><span>Navigate</span><kbd class="key">H</kbd></button>
+          <button type="button" class="rbtn tool" data-tool-button="select" aria-pressed="false" title="Select (V): click a shape, or drag a box round shapes"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l6 15 2-6 6-2z"/><path d="M15 15l5 5" /><path d="M3 9V3h6" stroke-dasharray="2 2"/></svg><span>Select</span><kbd class="key">V</kbd></button>
+          <button type="button" class="rbtn tool" data-tool-button="move" aria-pressed="false" title="Move (M): drag to slide the selection; Ctrl for up and down"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18"/><path d="M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/></svg><span>Move</span><kbd class="key">M</kbd></button>
+          <button type="button" class="rbtn tool" data-tool-button="rotate" aria-pressed="false" title="Rotate (R): drag to turn the selection; Ctrl to tilt, Alt to roll"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg><span>Rotate</span><kbd class="key">R</kbd></button>
+          <button type="button" class="rbtn tool" data-tool-button="anchor" aria-pressed="false" title="Anchor (P): click the block the blueprint lands on in game"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M12 7v14"/><path d="M5 13a7 7 0 0 0 14 0"/><path d="M8 10h8"/></svg><span>Anchor</span><kbd class="key">P</kbd></button>
+        </div>
+        <div class="rlabel" id="g-tools">Tools</div>
+      </div>
+
+      <div class="rgroup" role="group" aria-labelledby="g-view">
+        <div class="rbody">
+          <button id="settings" type="button" class="rbtn" title="Settings: theme, reopening files"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span>Settings</span></button>
+          <button id="about" type="button" class="rbtn" title="About ShapeForge: version, author, credits"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><path d="M12 7.5v.5"/></svg><span>About</span></button>
+          <button id="fit" type="button" class="rbtn" title="Fit the whole build in the view"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><rect x="9" y="9" width="6" height="6"/></svg><span>Fit view</span></button>
+          <div class="walk" role="group" aria-label="What W A S D do">
+            <span class="walk-label">WASD</span>
+            <button type="button" class="seg" data-walk="fly" aria-pressed="true" title="W and S move forward and back, A and D slide sideways, staying level">Fly</button>
+            <button type="button" class="seg" data-walk="orbit" aria-pressed="false" title="A and D swing round the view's middle, W and S zoom in and out">Orbit</button>
+          </div>
+        </div>
+        <div class="rlabel" id="g-view">View</div>
+      </div>
+
+      <div class="rgroup export" role="group" aria-labelledby="g-export">
+        <div class="rbody">
+          <div class="export-fields">
+            <label class="rfield" title="The blueprint's name in Embervale Toolkit">Name <input id="name" type="text" value="" placeholder="shapeforge" /></label>
+            <div class="anchor-row"><span id="anchor-info" class="anchor-info">Anchor: auto</span><button id="anchor-clear" type="button" class="seg" title="Back to the default anchor: the lowest block nearest the middle" hidden>Auto</button><label class="rfield lift" title="How many meters above the block you place in game the anchor block lands (negative: below)">Lift <input id="lift" type="number" step="0.5" value="0" /></label></div>
+            <label class="rcheck" title="Fills the blueprint with Foundations, Walls, Ceilings and Columns where they fit exactly. The blocks placed in game are the same; there are just far fewer pieces. Applies to all projects."><input id="opt-merge" type="checkbox" checked /> Use larger pieces</label>
+          </div>
+          <button id="export" type="button" class="rbtn primary" title="Export the build as an .ebblueprint for Embervale Toolkit"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v4h16v-4"/></svg><span>Export</span></button>
+        </div>
+        <div class="rlabel" id="g-export">Export .ebblueprint</div>
+      </div>
+
+      <div class="rstatus" aria-live="polite">
+        <p id="stats" class="stats"></p>
+        <p id="warning" class="status" data-kind="error"></p>
+        <p id="status" class="status" role="status"></p>
+      </div>
+    </header>
+    <aside id="panel">
+      <section id="editor" class="first"></section>
+
+    </aside>
+    <div id="gutter-left" class="gutter" role="separator" aria-orientation="vertical" aria-label="Resize the settings panel" tabindex="0" title="Drag to resize; double-click to reset"></div>
+    <main id="viewport" data-tool="navigate"><div id="select-rect" hidden></div></main>
+    <div id="gutter-right" class="gutter" role="separator" aria-orientation="vertical" aria-label="Resize the shapes panel" tabindex="0" title="Drag to resize; double-click to reset"></div>
+    <aside id="shapes-panel" aria-label="Shapes">
+      <section class="first shapes">
+        <h2>Shapes</h2>
+        <div class="add-row">
+          <select id="add-kind" aria-label="Shape to add"></select>
+          <button id="add" type="button">Add</button>
+        </div>
+        <button id="import" type="button" class="secondary full">Import .ebblueprint…</button>
+        <ol id="shape-list" class="shape-list" aria-label="Shapes, in the order they apply"></ol>
+        <div class="list-actions">
+          <button id="new-folder" type="button" class="secondary" title="A new folder where the selected shape or folder is, holding it">New folder</button>
+          <button id="duplicate" type="button" class="secondary">Duplicate</button>
+          <button id="move-up" type="button" class="secondary" aria-label="Move up">Up</button>
+          <button id="move-down" type="button" class="secondary" aria-label="Move down">Down</button>
+          <button id="delete" type="button" class="secondary danger">Delete</button>
+        </div>
+        <div class="list-actions">
+          <button id="turn-left" type="button" class="secondary" title="Turn every shape a quarter turn counterclockwise (seen from above), around the middle of the build">Turn all 90° ⟲</button>
+          <button id="turn-right" type="button" class="secondary" title="Turn every shape a quarter turn clockwise (seen from above), around the middle of the build">Turn all 90° ⟳</button>
+        </div>
+        <p class="hint">Shapes apply top to bottom: a subtract or intersect shape only affects the shapes above it. Drag rows to reorder or into folders; double-click or F2 to rename.</p>
+      </section>
+    </aside>
+    <section id="page-view" hidden tabindex="-1" aria-label="README"><article id="page-body" class="md"></article></section>
+    <dialog id="about-dialog" aria-labelledby="about-title">
+      <div class="about-head">
+        <!--LOGO-->
+        <div>
+          <h2 id="about-title" class="about-name">Shape<span>Forge</span></h2>
+          <p class="about-version">Version <span id="about-version"></span></p>
+        </div>
+      </div>
+      <p>Builds Enshrouded blueprints from 3D shapes and exports them as <code>.ebblueprint</code> files for Embervale Toolkit.</p>
+      <dl class="about-facts">
+        <dt>Author</dt><dd id="about-author"></dd>
+        <dt>Contact</dt><dd><a id="about-email" href="#"></a></dd>
+        <dt>Source</dt><dd><a id="about-source" href="#"></a></dd>
+        <dt>Licence</dt><dd>GNU General Public License v3 or later: free to use, study, change and share</dd>
+      </dl>
+      <p class="hint">Built with Electron and three.js. Text fonts from Google Fonts, under the SIL Open Font License 1.1 (Permanent Marker: Apache License 2.0). ShapeForge is a fan-made tool, not made by or affiliated with Keen Games.</p>
+      <div class="dialog-buttons"><button id="about-readme" type="button" class="secondary">Open the README</button><button id="about-close" type="button" class="primary">Close</button></div>
+    </dialog>
+    <dialog id="settings-dialog" aria-labelledby="settings-title">
+      <h2 id="settings-title">Settings</h2>
+      <fieldset>
+        <legend>Theme</legend>
+        <label><input type="radio" name="theme" value="system" id="theme-system" /> <span>System: dark unless Windows is set to light<small id="theme-detail" class="theme-detail"></small></span></label>
+        <label><input type="radio" name="theme" value="light" id="theme-light" /> Light</label>
+        <label><input type="radio" name="theme" value="dark" id="theme-dark" /> Dark</label>
+      </fieldset>
+      <fieldset>
+        <legend>Files</legend>
+        <label><input type="checkbox" id="opt-reopen" /> Reopen the files I had open when ShapeForge starts</label>
+      </fieldset>
+      <p class="hint">Settings are kept on this computer.</p>
+      <div class="dialog-buttons"><button id="settings-done" type="button" class="primary">Done</button></div>
+    </dialog>
+    <script src="renderer.js"></script>
+  </body>
+</html>

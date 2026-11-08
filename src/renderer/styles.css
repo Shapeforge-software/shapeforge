@@ -1,0 +1,395 @@
+:root {
+  /* Dark (the default; Settings can choose Light, or follow Windows). */
+  --bg: #15171a;
+  --panel: #1f2328;
+  --line: #333a42;
+  --text: #e4e7eb;
+  --muted: #9aa3ad;
+  --accent: #e0a040;
+  --accent-text: #1b1406;
+  --accent-hover: #eab25a;
+  --accent-soft: rgba(224, 160, 64, 0.12);
+  --ok: #7cc48b;
+  --error: #f08a7a;
+  --ribbon: #1a1d21;
+  --hover: #262b31;
+  --press: #323942;
+  --scroll: #56606b;
+  --scroll-hover: #77828e;
+  --picked: #3a2f1c;
+  --picked-text: #ffd9a0;
+  --pipe-row: #232a24;
+  --segment-text: #c9d3cb;
+  --segment-picked: #22352a;
+  --segment-picked-text: #bff0c9;
+  --drop: #2d3a2a;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg: #eeece7;
+  --panel: #f9f8f5;
+  --line: #d3cfc6;
+  --text: #1f2328;
+  --muted: #5b636d;
+  --accent: #b0700f;
+  --accent-text: #ffffff;
+  --accent-hover: #9a610c;
+  --accent-soft: rgba(176, 112, 15, 0.14);
+  --ok: #2c7a41;
+  --error: #b5382a;
+  --ribbon: #e5e2dc;
+  --hover: #e0ddd6;
+  --press: #d4d0c7;
+  --scroll: #b3aea5;
+  --scroll-hover: #948f86;
+  --picked: #f4e0bd;
+  --picked-text: #5e3b07;
+  --pipe-row: #e3ece3;
+  --segment-text: #3c4a3f;
+  --segment-picked: #d3ead8;
+  --segment-picked-text: #1b5228;
+  --drop: #d6ebd2;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  display: grid;
+  /* Settings | handle | view | handle | shapes. The sidebars' widths are dragged with the handles (renderer.ts). */
+  grid-template-columns: var(--left-w, 300px) 6px minmax(0, 1fr) 6px var(--right-w, 290px);
+  /* Open files (only with two or more) | ribbon | the rest. */
+  grid-template-rows: auto auto minmax(0, 1fr);
+  overflow: hidden;
+}
+
+#panel, #shapes-panel {
+  background: var(--panel);
+  overflow-y: auto;
+  padding: 16px;
+  min-width: 0;
+}
+/* The shapes sidebar: the list takes whatever height is left. */
+#shapes-panel { display: flex; flex-direction: column; }
+#shapes-panel section.shapes { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+
+/* The handles between the sidebars and the view: a line that lights up when you can drag it. */
+.gutter { position: relative; cursor: col-resize; background: var(--panel); touch-action: none; z-index: 2; }
+.gutter::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; transform: translateX(-50%); background: var(--line); transition: background 0.1s, width 0.1s; }
+.gutter:hover::after, .gutter.dragging::after, .gutter:focus-visible::after { width: 3px; background: var(--accent); }
+.gutter:focus-visible { outline: none; }
+body.resizing, body.resizing * { cursor: col-resize !important; user-select: none !important; }
+body.resizing #viewport { pointer-events: none; }
+
+/* ---------- ribbon: project, edit, view and export controls across the top ---------- */
+#ribbon {
+  grid-column: 1 / -1;
+  display: flex; align-items: stretch; flex-wrap: wrap; gap: 0;
+  background: var(--ribbon); border-bottom: 1px solid var(--line);
+  padding: 6px 10px 4px; min-height: 76px;
+}
+#ribbon .brand { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 8px; align-content: center; align-items: center; padding: 0 10px 0 2px; width: 160px; flex: none; }
+#ribbon .brand .brand-logo { grid-row: 1 / 3; flex: none; width: 34px; height: 34px; padding: 0; border-radius: 8px; background: transparent; cursor: pointer; }
+#ribbon .brand .brand-logo:hover { background: var(--hover); }
+#ribbon .brand .brand-logo:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+#ribbon .brand .logo { display: block; width: 34px; height: 34px; }
+#ribbon .brand .project-file { grid-column: 2; }
+#ribbon .brand h1 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: 0.01em; }
+#ribbon .project-file { margin: 2px 0 0; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; word-break: normal; }
+.rgroup { flex: none; display: flex; flex-direction: column; border-left: 1px solid var(--line); padding: 0 5px; }
+.rbody { flex: 1; display: flex; align-items: center; gap: 2px; }
+.rlabel { text-align: center; font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; padding-top: 2px; white-space: nowrap; }
+button.rbtn {
+  flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  min-width: 46px; height: 50px; padding: 4px 4px; border-radius: 6px;
+  background: transparent; color: var(--text); font-size: 12px; font-weight: 500;
+}
+button.rbtn:hover:not(:disabled) { background: var(--hover); }
+button.rbtn:active:not(:disabled) { background: var(--press); }
+button.rbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+button.rbtn:disabled { opacity: 0.4; }
+button.rbtn.primary { background: var(--accent); color: var(--accent-text); font-weight: 600; min-width: 64px; margin-left: 6px; }
+button.rbtn.primary:hover:not(:disabled) { background: var(--accent-hover); }
+.icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.export-fields { display: flex; flex-direction: column; gap: 4px; }
+.rfield { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.rfield input { width: 118px; padding: 4px 6px; }
+.rcheck { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.rcheck input { width: auto; margin: 0; }
+/* Stats and messages take the rest of the bar. */
+.rstatus { flex: 1 1 150px; min-width: 0; display: flex; flex-direction: column; justify-content: center; border-left: 1px solid var(--line); padding: 0 6px 0 12px; }
+.rstatus p { margin: 0; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: break-word; }
+.rstatus .stats { color: var(--muted); font-size: 12px; }
+.rstatus .status { min-height: 0; font-size: 12px; }
+.rstatus .status:empty { display: none; }
+
+section { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
+section.first { border-top: 0; margin-top: 0; padding-top: 0; }
+h2 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; color: var(--muted); font-size: 12px; }
+.row[hidden] { display: none; }
+
+.triple { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: -6px 0 10px; }
+.triple label { display: flex; align-items: center; gap: 4px; color: var(--muted); font-size: 12px; }
+.triple input { min-width: 0; }
+
+input, select, textarea {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font: inherit;
+}
+textarea { resize: vertical; min-height: 3.2em; line-height: 1.4; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+.material { display: flex; align-items: center; gap: 8px; }
+.swatch { flex: none; width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--line); }
+
+.buttons { display: flex; gap: 8px; margin-top: 4px; }
+button {
+  flex: 1;
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font: inherit;
+  font-weight: 600;
+  background: var(--accent);
+  color: var(--accent-text);
+  cursor: pointer;
+}
+button.secondary { flex: 0 0 auto; background: var(--line); color: var(--text); }
+button:disabled { opacity: 0.6; cursor: default; }
+
+.stats { margin: 10px 0 0; color: var(--muted); font-size: 12px; }
+.status { margin: 6px 0 0; font-size: 12px; min-height: 1em; word-break: break-all; }
+.status[data-kind="ok"] { color: var(--ok); }
+.status[data-kind="error"] { color: var(--error); }
+
+#viewport { position: relative; min-width: 0; }
+#viewport canvas { display: block; width: 100%; height: 100%; }
+
+h3 { margin: 14px 0 8px; font-size: 12px; font-weight: 600; color: var(--muted); }
+h4 { margin: 16px 0 6px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 12px; font-weight: 600; color: var(--text); }
+/* An arm's heading on L, T and cross roofs: its name, and a Reset button on the right. */
+.arm-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 16px 0 6px; padding-top: 10px; border-top: 1px solid var(--line); }
+.arm-head h4 { margin: 0; padding: 0; border: 0; }
+button.small { padding: 3px 10px; font-size: 12px; }
+/* Toggle buttons (a shape's uncap ends): pressed ones stand out. */
+.toggles { display: flex; flex-wrap: wrap; gap: 6px; }
+.toggles button.toggle { flex: 0 0 auto; min-width: 52px; padding: 5px 10px; font-size: 12px; background: var(--line); color: var(--text); }
+.toggles button.toggle.on { background: var(--accent); color: var(--accent-text); }
+/* The line after the last arm's settings, before the general ones (Turn, material). */
+hr.arm-end { border: 0; border-top: 1px solid var(--line); margin: 16px 0 4px; }
+
+.add-row { display: flex; gap: 8px; }
+.add-row select { flex: 1; min-width: 0; }
+.add-row button { flex: 0 0 auto; }
+
+.shape-list {
+  list-style: none; margin: 10px 0 8px; padding: 0; border: 1px solid var(--line); border-radius: 6px;
+  /* Scrolls once long; the bottom edge drags to make it taller or shorter. */
+  flex: 1 1 auto; height: 0; min-height: 140px; overflow: auto;
+  /* Scrolls sideways when a row (deep folders, pipe branches) is wider than the sidebar; every row is given the widest
+     row's width (renderer.ts: fitRowWidths) so they line up. */
+  scrollbar-color: var(--scroll) var(--bg); scrollbar-gutter: stable;
+}
+.shape-list::-webkit-scrollbar { width: 10px; height: 10px; }
+.shape-list::-webkit-scrollbar-corner { background: var(--bg); }
+.shape-list::-webkit-scrollbar-track { background: var(--bg); border-radius: 0 6px 6px 0; }
+.shape-list::-webkit-scrollbar-thumb { background: var(--scroll); border-radius: 5px; border: 2px solid var(--bg); }
+.shape-list::-webkit-scrollbar-thumb:hover { background: var(--scroll-hover); }
+.shape-list:empty::before { content: "No shapes yet"; display: block; padding: 8px 10px; color: var(--muted); font-size: 12px; }
+.shape-list li { width: max-content; min-width: 100%; display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 8px; cursor: pointer; border-bottom: 1px solid var(--line); min-height: 30px; position: relative; }
+.shape-list li:last-child { border-bottom: 0; }
+.shape-list li:hover { background: var(--hover); }
+.shape-list li.selected { background: var(--picked); color: var(--picked-text); }
+/* With several selected, the one last clicked (where a Shift range starts from) has a bar on its left. */
+.shape-list li.selected.primary { box-shadow: inset 3px 0 0 var(--accent); }
+.shape-list li.cut .swatch { border-style: dashed; }
+.shape-list li .label { flex: 1 0 auto; white-space: nowrap; }
+.shape-list li .kind { flex: none; color: var(--muted); font-size: 11px; white-space: nowrap; }
+.shape-list li.folder { font-weight: 600; }
+.shape-list li.folder .count { flex: none; color: var(--muted); font-size: 11px; font-weight: 400; background: var(--bg); border-radius: 8px; padding: 0 6px; }
+.shape-list li .folder-icon { flex: none; color: var(--accent); font-size: 12px; }
+/* A pipe run: a folder of its segments, in green. */
+.shape-list li.pipe { font-weight: 600; }
+.shape-list li.pipe .folder-icon, .shape-list .pipe-icon { color: var(--ok); }
+.shape-list li.pipe .count { flex: none; color: var(--muted); font-size: 11px; font-weight: 400; background: var(--bg); border-radius: 8px; padding: 0 6px; }
+.shape-list li.parent { background: var(--pipe-row); }
+.shape-list li.segment { font-size: 12.5px; color: var(--segment-text); min-height: 26px; padding-top: 3px; padding-bottom: 3px; }
+.shape-list li.segment .seg-dot { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); opacity: 0.7; }
+.shape-list li.segment.joint, .shape-list li.segment.branch { font-weight: 600; }
+.shape-list li.segment .count { flex: none; color: var(--muted); font-size: 11px; font-weight: 400; background: var(--bg); border-radius: 8px; padding: 0 6px; }
+.shape-list li.segment.selected { background: var(--segment-picked); color: var(--segment-picked-text); box-shadow: inset 3px 0 0 var(--ok); }
+.shape-list button.caret { flex: 0 0 auto; width: 16px; padding: 0; background: none; color: var(--muted); font-size: 12px; line-height: 1; }
+.shape-list button.caret:hover { color: var(--text); }
+.shape-list .caret-space { flex: none; width: 16px; }
+.shape-list li.empty { color: var(--muted); font-size: 12px; font-style: italic; cursor: default; }
+.shape-list li.empty:hover { background: none; }
+.shape-list input.rename { flex: 1 1 auto; min-width: 0; padding: 2px 6px; font-size: 13px; }
+.shape-list li.dragging { opacity: 0.45; }
+/* Where a dragged row will land: a line above or below a row, or a folder lit up to drop into. */
+.shape-list li.drop-before::before, .shape-list li.drop-after::after { content: ""; position: absolute; left: 4px; right: 4px; height: 2px; background: var(--accent); pointer-events: none; }
+.shape-list li.drop-before::before { top: -1px; }
+.shape-list li.drop-after::after { bottom: -1px; }
+.shape-list li.drop-into { background: var(--drop); box-shadow: inset 0 0 0 2px var(--ok); }
+.swatch.small { width: 12px; height: 12px; border-radius: 3px; }
+
+.list-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.list-actions button { flex: 1 1 auto; padding: 6px 8px; font-size: 12px; }
+.folder-actions { flex-wrap: wrap; }
+.folder-actions button { flex: 1 1 auto; font-size: 12px; padding: 6px 8px; }
+button.danger { color: var(--error); }
+
+.hint { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+/* The roof hint's text changes as a roof switches between roof pieces and blocks; a fixed height keeps the fields
+   below it from moving (so repeated clicks on a field's arrows stay on target). Six lines fit the longest message. */
+#roof-hint { line-height: 1.45; height: calc(6 * 1.45em); overflow-y: auto; }
+
+.dirty { color: var(--accent); }
+button.full { display: block; width: 100%; margin-top: 8px; }
+.layer-info { margin: 0 0 10px; color: var(--muted); font-size: 12px; }
+.check { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+.check input { width: auto; margin: 0; }
+/* Too narrow for the stats beside the buttons: they drop to a thin line under them. */
+@media (max-width: 1440px) {
+  .rstatus { flex: 1 1 100%; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 2px 14px; border-left: 0; border-top: 1px solid var(--line); margin-top: 4px; padding: 3px 4px 0; }
+  .rstatus p { -webkit-line-clamp: 1; }
+}
+#editor .multi-what { margin: 0 0 12px; }
+
+/* Tabs (an L, T or cross roof's settings: Roof and one per arm), in even columns: two in the usual sidebar, more as it widens. */
+.tabs { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 4px; margin: 4px 0 0; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.tabs button.tab { min-width: 0; overflow: hidden; text-overflow: ellipsis; padding: 5px 9px; font-size: 12px; font-weight: 500; background: var(--bg); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; white-space: nowrap; }
+.tabs button.tab:hover { color: var(--text); background: var(--hover); }
+.tabs button.tab.on { background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-weight: 600; }
+.tabs button.tab:focus-visible { outline: 2px solid var(--text); outline-offset: 1px; }
+.tab-panel[hidden] { display: none; }
+.arm-head.tab-head { border-top: 0; padding-top: 0; margin-top: 12px; }
+
+/* Tabs inside tabs (a pipe joint's branches): a little smaller, set in. */
+.tab-panel .tabs { margin-top: 2px; }
+.tab-panel .tabs button.tab { padding: 4px 7px; font-size: 11.5px; }
+#text-hint { margin: -4px 0 10px; }
+
+/* Tools: the one in use stays lit. */
+button.rbtn.tool[aria-pressed="true"] { background: var(--picked); color: var(--picked-text); box-shadow: inset 0 -2px 0 var(--accent); }
+/* WASD: Fly or Orbit, a small two-way switch under View. */
+.walk { display: grid; grid-template-columns: auto auto; gap: 3px; align-items: center; margin-left: 4px; }
+.walk-label { grid-column: 1 / -1; font-size: 10.5px; color: var(--muted); letter-spacing: 0.05em; text-align: center; }
+button.seg { flex: none; padding: 3px 8px; font-size: 11.5px; font-weight: 500; background: var(--bg); color: var(--muted); border: 1px solid var(--line); border-radius: 5px; }
+button.seg[aria-pressed="true"] { background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-weight: 600; }
+/* The 3D view's cursor follows the tool; the box drawn while selecting. */
+#viewport[data-tool="navigate"] canvas { cursor: grab; }
+#viewport[data-tool="select"] canvas { cursor: crosshair; }
+#viewport[data-tool="move"] canvas { cursor: move; }
+#viewport[data-tool="rotate"] canvas { cursor: ew-resize; }
+#viewport[data-tool="anchor"] canvas { cursor: cell; }
+#select-rect { position: absolute; border: 1px dashed var(--accent); background: var(--accent-soft); pointer-events: none; z-index: 3; }
+
+/* Key hints on the tool buttons: a small key cap in the top right corner. */
+.rbtn.tool { position: relative; }
+.rbtn.tool .key { position: absolute; top: 2px; right: 3px; font: 600 9px/1 ui-monospace, monospace; padding: 1px 3px; border: 1px solid var(--line); border-radius: 3px; color: var(--muted); background: transparent; }
+.rbtn.tool[aria-pressed="true"] .key { color: inherit; border-color: currentColor; }
+.vec-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.vec-head .row { margin-bottom: 0; }
+.vec-head + .triple { margin-top: 4px; }
+button.reset { padding: 1px 8px; font-size: 11px; }
+
+/* Where the blueprint lands: the anchor readout, a button back to auto, and the lift. */
+.anchor-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.anchor-info { white-space: nowrap; }
+.anchor-row button.seg { padding: 1px 6px; font-size: 11px; }
+.rfield.lift input { width: 52px; }
+
+/* The Text shape's symbol picker. */
+.symbols { display: flex; flex-direction: column; gap: 6px; margin: -4px 0 10px; }
+.symbols > button { align-self: flex-start; }
+.symbols select { width: 100%; }
+.symbol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); gap: 3px; max-height: 236px; overflow-y: auto; padding: 4px; border: 1px solid var(--line); border-radius: 6px; }
+.symbol-grid button.symbol { display: grid; place-items: center; padding: 3px 0; background: transparent; border: 1px solid transparent; border-radius: 4px; cursor: pointer; }
+.symbol-grid button.symbol:hover, .symbol-grid button.symbol:focus-visible { border-color: var(--accent); background: var(--accent-soft); }
+
+/* Scale: a percent box and quick half / double buttons. */
+.scale-row { display: flex; gap: 6px; align-items: center; margin: -4px 0 10px; }
+.scale-row input { width: 90px; }
+
+/* The open files, as tabs above the ribbon (shown with two or more). */
+#file-tabs { grid-column: 1 / -1; grid-row: 1; display: flex; gap: 2px; padding: 4px 8px 0; background: var(--bg); border-bottom: 1px solid var(--line); overflow-x: auto; }
+#ribbon { grid-row: 2; }
+body > :not(#ribbon):not(#file-tabs):not(dialog) { grid-row: 3; }
+.file-tab { display: flex; align-items: center; flex: 0 1 auto; min-width: 90px; max-width: 220px; border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; background: var(--panel); color: var(--muted); }
+.file-tab[aria-selected="true"] { background: var(--ribbon); color: var(--text); box-shadow: inset 0 2px 0 var(--accent); }
+.file-tab button { background: transparent; border: 0; color: inherit; font: inherit; cursor: pointer; width: auto; min-width: 0; height: auto; box-shadow: none; }
+.file-tab button:hover { background: transparent; }
+.file-tab-name { flex: 1 1 auto; text-align: left; padding: 5px 4px 5px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 13px; }
+.file-tab-close { flex: none; padding: 2px 8px; font-size: 15px; line-height: 1; border-radius: 4px; }
+.file-tab-close:hover, .file-tab-name:hover { color: var(--text); }
+.file-tab-close:hover { background: var(--hover); }
+
+/* Settings. */
+#settings-dialog { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 18px 22px; width: min(440px, 90vw); }
+#settings-dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+#settings-dialog h2 { margin: 0 0 12px; font-size: 17px; }
+#settings-dialog fieldset { border: 1px solid var(--line); border-radius: 8px; margin: 0 0 12px; padding: 8px 12px 10px; display: flex; flex-direction: column; gap: 6px; }
+#settings-dialog legend { color: var(--muted); font-size: 12px; padding: 0 4px; }
+#settings-dialog label { display: flex; gap: 8px; align-items: flex-start; }
+#settings-dialog .theme-detail { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+#settings-dialog label { justify-content: flex-start; text-align: left; cursor: pointer; }
+#settings-dialog input { accent-color: var(--accent); margin: 3px 0 0; width: auto; height: auto; flex: none; padding: 0; border: 0; background: none; box-shadow: none; }
+#settings-dialog input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dialog-buttons { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* About */
+#about-dialog { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 22px 24px 18px; width: min(460px, 90vw); }
+#about-dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+#about-dialog p { margin: 0 0 12px; line-height: 1.45; }
+#about-dialog .about-head { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+#about-dialog .about-head .logo { width: 88px; height: 88px; flex: none; }
+#about-dialog .about-name { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; text-transform: none; color: var(--text); }
+#about-dialog .about-name span { color: #d9382c; }
+#about-dialog .about-version { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+#about-dialog .about-facts { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0 0 12px; }
+#about-dialog dt { color: var(--muted); }
+#about-dialog dd { margin: 0; }
+#about-dialog a { color: var(--accent); }
+#about-dialog a:hover { color: var(--accent-hover); }
+#about-dialog code { font-size: 12px; background: var(--bg); padding: 1px 4px; border-radius: 4px; }
+
+/* A document tab (the README): fills the space under the ribbon; the project's panels and view step aside, and the
+   ribbon's project tools rest. */
+#page-view { grid-column: 1 / -1; overflow: auto; background: var(--bg); outline: none; }
+#page-view[hidden] { display: none; }
+body.page-mode > :not(#ribbon):not(#file-tabs):not(dialog):not(#page-view):not(script) { display: none; }
+body.page-mode .page-off { opacity: 0.4; }
+.file-tab.doc-tab .file-tab-name { font-style: italic; }
+.md { max-width: 920px; margin: 0 auto; padding: 28px 40px 80px; line-height: 1.6; }
+.md h1, .md h2, .md h3 { line-height: 1.25; margin: 1.6em 0 0.6em; color: var(--text); text-transform: none; letter-spacing: normal; font-weight: 650; }
+.md h1 { font-size: 30px; margin-top: 0.4em; }
+.md h2 { font-size: 22px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.md h3 { font-size: 17px; }
+.md p, .md ul, .md ol, .md table, .md pre { margin: 0 0 14px; }
+.md ul, .md ol { padding-left: 24px; }
+.md li { margin: 3px 0; }
+.md li > ul, .md li > ol { margin: 4px 0; }
+.md code { font: 12.5px/1.4 Consolas, "Cascadia Mono", monospace; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+.md pre { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; }
+.md pre code { background: none; border: 0; padding: 0; font-size: 12px; line-height: 1.25; }
+.md table { border-collapse: collapse; display: block; overflow-x: auto; }
+.md th, .md td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+.md th { background: var(--panel); }
+.md a { color: var(--accent); }
+.md a:hover { color: var(--accent-hover); }

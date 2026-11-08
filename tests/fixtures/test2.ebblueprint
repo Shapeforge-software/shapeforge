@@ -1,0 +1,21 @@
+{
+  "format": "ebt-blueprint",
+  "version": 1,
+  "name": "test2",
+  "build": "1283531",
+  "created": "2026-11-03T01:38:56Z",
+  "toolkit": "3.4.1",
+  "id": "1d36d54f2b742505ccd357ff9885503f",
+  "source": "recorded",
+  "contentSha256": "a0ac26136d95309849a780a2c804c2c70b47567476c1ff8271eb91c73b71cd96",
+  "anchor": [0,0,0],
+  "pieces": [
+    {"kind":"block","blueprintId":1986896347,"materialItem":1406367026,"pos":[0,0,0],"rot":[0,0,0,1],"flag":0},
+    {"kind":"block","blueprintId":1986896347,"materialItem":1406367026,"pos":[0,0,0],"rot":[-0.707106769,0,0,0.707106769],"flag":0},
+    {"kind":"block","blueprintId":1986896347,"materialItem":1406367026,"pos":[0,0,-0.5],"rot":[-0.707106769,0,0,0.707106769],"flag":0},
+    {"kind":"block","blueprintId":1986896347,"materialItem":1406367026,"pos":[0,0,-1],"rot":[-0.707106769,0,0,0.707106769],"flag":0},
+    {"kind":"block","blueprintId":1986896347,"materialItem":1406367026,"pos":[0.5,0,-1.5],"rot":[0,0,0,1],"flag":0},
+    {"kind":"block","blueprintId":1986896347,"materialItem":1406367026,"pos":[0.5,0,0.5],"rot":[0,0,0,1],"flag":0},
+    {"kind":"block","blueprintId":1986896347,"materialItem":1406367026,"pos":[0.5,0,-0.5],"rot":[0,0,0,1],"flag":0}
+  ]
+}
