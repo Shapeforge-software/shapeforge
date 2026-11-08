@@ -1,0 +1,20 @@
+// The built-in fonts, in menu order: built by tools/build-fonts.py. Do not edit.
+import type { FontData } from '../text';
+import tiny5 from './tiny5';
+import micro5 from './micro5';
+import silkscreen from './silkscreen';
+import pressStart2p from './pressStart2p';
+import bungee from './bungee';
+import blackOpsOne from './blackOpsOne';
+import anton from './anton';
+import cinzel from './cinzel';
+import unifraktur from './unifraktur';
+import pirataOne from './pirataOne';
+import grenzeGotisch from './grenzeGotisch';
+import newRocker from './newRocker';
+import orbitron from './orbitron';
+import audiowide from './audiowide';
+import permanentMarker from './permanentMarker';
+import sedgwickAve from './sedgwickAve';
+import rubikSprayPaint from './rubikSprayPaint';
+export const FONTS: FontData[] = [tiny5, micro5, silkscreen, pressStart2p, bungee, blackOpsOne, anton, cinzel, unifraktur, pirataOne, grenzeGotisch, newRocker, orbitron, audiowide, permanentMarker, sedgwickAve, rubikSprayPaint];
